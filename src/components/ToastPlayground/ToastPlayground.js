@@ -2,34 +2,34 @@ import React from "react";
 
 import Button from "../Button";
 
-import VisuallyHidden from "../VisuallyHidden";
-
+import { ToastContext } from "../ToastProvider";
 import styles from "./ToastPlayground.module.css";
-
-import Toast from "../Toast";
+import ToastShelf from "../ToastShelf/ToastShelf";
 
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 
 function ToastPlayground() {
+  const { createToast } = React.useContext(ToastContext);
   const [message, setMessage] = React.useState("");
   const [notification, setNotification] = React.useState(VARIANT_OPTIONS[0]);
-  const [isRendered, setIsRendered] = React.useState(false);
-  function handleDismiss() {
-    setIsRendered(false);
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    createToast(message, notification);
+    setMessage("");
+    setNotification(VARIANT_OPTIONS[0]);
   }
 
   return (
-    <div className={styles.wrapper}>
+    <div onSubmit={handleSubmit} className={styles.wrapper}>
       <header>
         <img alt="Cute toast mascot" src="/toast.png" />
         <h1>Toast Playground</h1>
       </header>
-      {isRendered && (
-        <Toast variant={notification} handleDismiss={handleDismiss}>
-          {message}
-        </Toast>
-      )}
-      <div className={styles.controlsWrapper}>
+
+      <ToastShelf />
+
+      <form className={styles.controlsWrapper}>
         <div className={styles.row}>
           <label
             htmlFor="message"
@@ -77,10 +77,10 @@ function ToastPlayground() {
         <div className={styles.row}>
           <div className={styles.label} />
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
-            <Button onClick={() => setIsRendered(true)}>Pop Toast!</Button>
+            <Button>Pop Toast!</Button>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
