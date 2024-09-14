@@ -20,22 +20,6 @@ function ToastPlayground() {
     setNotification(VARIANT_OPTIONS[0]);
   }
 
-  const { dismissAllToasts } = React.useContext(ToastContext);
-
-  React.useEffect(() => {
-    function handleKeyDown(event) {
-      if (event.code === "Escape") {
-        dismissAllToasts();
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [dismissAllToasts]);
-
   return (
     <div onSubmit={handleSubmit} className={styles.wrapper}>
       <header>
