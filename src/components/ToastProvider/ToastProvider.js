@@ -5,7 +5,6 @@ export const ToastContext = React.createContext();
 
 function ToastProvider({ children }) {
   const [toasts, setToasts] = React.useState([]);
-  const escapeKey = useEscapeKey;
 
   function dismissToast(id) {
     const nextToasts = toasts.filter((toast) => {
@@ -19,7 +18,7 @@ function ToastProvider({ children }) {
     setToasts([]);
   }
 
-  escapeKey(dismissAllToasts);
+  useEscapeKey(() => dismissAllToasts());
 
   function createToast(message, notification) {
     const nextToasts = [
