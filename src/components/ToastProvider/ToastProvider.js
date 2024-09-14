@@ -13,6 +13,24 @@ function ToastProvider({ children }) {
     setToasts(nextToasts);
   }
 
+  function dismissAllToasts() {
+    setToasts([]);
+  }
+
+  React.useEffect(() => {
+    function handleKeyDown(event) {
+      if (event.code === "Escape") {
+        dismissAllToasts();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   function createToast(message, notification) {
     const nextToasts = [
       ...toasts,
@@ -26,7 +44,9 @@ function ToastProvider({ children }) {
   }
 
   return (
-    <ToastContext.Provider value={{ toasts, createToast, dismissToast }}>
+    <ToastContext.Provider
+      value={{ toasts, createToast, dismissToast, dismissAllToasts }}
+    >
       {children}
     </ToastContext.Provider>
   );
